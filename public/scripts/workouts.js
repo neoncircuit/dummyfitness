@@ -13,6 +13,8 @@ let selectedType = 'All';
 function displayWorkouts(filteredWorkouts) {
   workoutsContainer.innerHTML = '';
 
+  filteredWorkouts.sort((a, b) => a.name.localeCompare(b.name));
+
   filteredWorkouts.forEach(workout => {
     const workoutElement = document.createElement('div');
     workoutElement.classList.add('workout-card', workout.difficulty.toLowerCase());
@@ -66,7 +68,7 @@ function applyFilters(selectedValue, type) {
     if (type === 'Difficulty') {
       filtered = workouts.filter(workout => workout.difficulty === selectedValue);
     } else if (type === 'Category') {
-      filtered = workouts.filter(workout => workout.category === selectedValue);
+      filtered = workouts.filter(workout => workout.category.includes(selectedValue));
     }
   }
   displayWorkouts(filtered);
@@ -101,7 +103,10 @@ filterType.addEventListener('input', function() {
   if (selectedType === 'Difficulty') {
     options.push(...new Set(workouts.map(workout => workout.difficulty)));
   } else if (selectedType === 'Category') {
-    options.push(...new Set(workouts.map(workout => workout.category)));
+      let allCategories = workouts.flatMap(workout => workout.category);
+      let uniqueCategories = [...new Set(allCategories)];
+      uniqueCategories.sort(); // sort the categories in alphabetical order
+      options.push(...uniqueCategories);
   }
 
   const filterDropdowns = document.getElementById('filterDropdowns');

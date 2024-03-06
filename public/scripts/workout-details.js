@@ -37,6 +37,9 @@ function displayWorkoutDetails(workout) {
 
   const wrongFormsElement = document.getElementById('wrong-forms');
   wrongFormsElement.innerHTML = workout.wrong.map(form => `<img src="${form.image}" alt="Wrong Form Image" class="form-icon"><p>${form.description}</p><br>`).join('');
+
+  const tipElement = document.getElementById('workout-tip');
+  tipElement.innerHTML = workout.tip.map(tip => `<img src="${tip.image}" alt="Tip Image" class="tip-icon"><p>${tip.description}</p><br>`).join('');
 }
 
 function displayWorkoutVideos(workout) {
