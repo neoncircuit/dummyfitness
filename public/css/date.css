@@ -1,0 +1,58 @@
+.time-section {
+  display: flex;
+  justify-content: space-around;
+  align-items: center;
+  background-color: #f7f7f77a;
+  padding: 30px;
+  margin: 20px 0;
+  border-radius: 10px;
+  box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+}
+
+.time-container {
+  text-align: center;
+}
+
+.greeting {
+  font-size: 24px;
+  font-weight: bold;
+  color: #333;
+  margin-bottom: 10px;
+}
+
+.clock {
+  font-size: 48px;
+  font-weight: bold;
+  color: #555;
+  width: 1000px;
+  text-align: center;
+}
+
+.digital-date {
+  font-size: 18px;
+  color: #666;
+} 
+
+.quote-container {
+  width: 40%; 
+  margin: 20px auto; 
+  padding: 20px; 
+  border: 1px solid #ccc; 
+  border-radius: 5px; 
+}
+
+.quote {
+  font-family: 'Roboto', Arial, sans-serif;
+  font-size: 18px; 
+  line-height: 1.5; 
+  margin-bottom: 10px; 
+}
+
+.author {
+  font-style: italic;
+  font-size: 14px; 
+}
+
+#toggle-format {
+  color: #555; 
+}

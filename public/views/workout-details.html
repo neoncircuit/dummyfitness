@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Workout Details</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/scripts/navigation.js" defer></script>
+  <script>
+    function goBack() {
+      window.history.back();
+    }
+  </script>
+
+  <style>
+    video {
+      max-width: 100%; /* Ensure the video doesn't exceed its container's width */
+      height: auto; /* Maintain the video's aspect ratio */
+      display: inline-block; /* Display videos in-line with each other */
+      margin: 10px; /* Add some margin for spacing */
+    }
+
+    .video-container {
+      display: flex;
+      justify-content: space-between;
+      margin-top: 20px; 
+    }
+
+    #frontal-video,
+    #side-video {
+      width: 40%; 
+    }
+
+    #workout-name,
+    #workout-difficulty,
+    #workout-category {
+      font-size: 30px; 
+    }
+
+    #workout-steps img {
+      width: 40px;  
+      height: 40px; 
+      margin-right: 5px; 
+      margin-bottom: 5px;
+      vertical-align: middle;
+    }
+
+    #workout-steps {
+      font-size: 20px;
+    }
+    
+    #correct-forms img {
+      width: 40px;  
+      height: 40px; 
+      margin-right: 5px; 
+      margin-bottom: 5px;
+      vertical-align: middle;
+    }
+
+    #correct-forms {
+      font-size: 15px;
+    }
+
+    #wrong-forms img {
+      width: 40px;  
+      height: 40px; 
+      margin-right: 5px; 
+      margin-bottom: 5px;
+      vertical-align: middle;
+    }
+    
+    #wrong-forms {
+      font-size: 15px;
+    }
+
+    p {
+      margin-bottom: 20px;
+    }
+
+    .go-back-button {
+      color: black;
+      padding: 10px 20px; 
+      font-size: 20px;
+    }
+
+    @media (max-width: 768px) {
+      .video-container {
+        flex-direction: column; /* Stack videos on top of each other */
+        align-items: center; /* Center videos horizontally */
+      }
+  
+      #frontal-video,
+      #side-video {
+        width: 100%; /* Take up the full width of the container */
+        margin-bottom: 10px; /* Add some spacing between stacked videos */
+      }
+    }
+
+  </style>
+</head>
+
+
+
+<body>
+  <div id="navigation"></div>
+  
+  <div class="workout-details-container">
+    
+    <!-- Add any other details you want to display -->
+    <h1 id="workout-name"></h1>
+    <video id="frontal-video" controls>
+      Your browser does not support the video tag.
+    </video>
+    <video id="side-video" controls>
+      Your browser does not support the video tag.
+    </video>
+
+    
+    <p id="workout-description"></p>
+    <p><strong>Difficulty:</strong> <span id="workout-difficulty"></span></p>
+    <p><strong>Category:</strong> <span id="workout-category"></span></p>
+    <p><span id="workout-steps"></span></p>
+    <p><span id="correct-forms"></span></p>
+    <p><span id="wrong-forms"></span></p>
+    
+    <button class="go-back-button" onclick="goBack()" aria-label="Go Back">Go Back</button>
+  </div>
+
+  <script src="/scripts/workout-details.js" type="module"></script>
+  <script src="/scripts/workoutbank.js" type="module"></script>
+  <script src="/scripts/workouts.js" type="module"></script>
+</body>
+</html>

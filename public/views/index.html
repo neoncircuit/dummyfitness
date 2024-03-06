@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+  <link rel="stylesheet" href="/css/date.css">
+
+  <title>Home page</title>
+
+  <script>
+    document.addEventListener('submit', function(event) {
+      event.preventDefault();
+    });   
+  </script>
+  <script src="/scripts/navigation.js" defer></script>
+  
+  <script type="module" src="/scripts/fitnessquotes.js"></script>
+  <script src="https://code.jquery.com/jquery-3.2.1.min.js"></script>
+
+  <style>
+    .container {
+      display: flex;
+      flex-direction: row; 
+      background-color: rgb(42, 253, 0);
+    }
+
+    #fitness-quote p {
+      color: #555; 
+    }
+    
+    #fitness-quote .author {
+        color: #555; 
+    }
+    
+    @media screen and (max-width: 768px) {
+      .container {
+        flex-direction: column; 
+      }
+
+      .clock {
+        font-size: 48px;
+        font-weight: bold;
+        color: #555;
+        width: 100%; 
+        text-align: center;
+      }
+
+      .quote-container {
+        width: auto; 
+        word-break: normal; 
+      }
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div id="navigation"></div>
+  
+  <h1>Unlock Your Strength: Where Fitness Begins</h1>
+
+  <main>
+    <section class="time-section">
+      <div class="container">
+        <div class="time-container">
+          <div class="greeting" id="greeting"></div>
+          <div class="clock" id="clock"></div>
+          <div class="digital-date" id="digital-date"></div>
+          <button onclick="toggleTimeFormat()" id="toggle-format">Toggle Time Format</button>
+        </div>
+
+        <div class="quote-container">
+          <div class="quote" id="fitness-quote"></div>
+        </div>
+      </div>                  
+    </section>
+    
+    <section>
+      <h2>About</h2>
+      <p>
+        Greetings! I'm James, and I welcome you to my Final Year Project. <br>
+        As a dedicated computer science student with a passion for fitness, this project is a fusion of my technical expertise and love for a healthy lifestyle. <br>
+        Join me on this journey where I explore the intersection of technology and fitness, aiming to create an innovative and user-friendly solution for fellow fitness enthusiasts. <br> 
+        Let's embark on a collaborative exploration of how cutting-edge technology can elevate our fitness experiences. Together, we'll strive for a healthier, more connected future.
+      </p>
+    </section>
+
+    <script src="/scripts/date.js"></script>
+  </main>
+
+</body>
+</html>

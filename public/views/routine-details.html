@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/css/style.css">
+    <title>Routine Details</title>
+    <script src="/scripts/navigation.js" defer></script>
+    <style>
+        .workout-details {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            text-align: center;
+            font-size: 2em;
+        }
+
+        .workout-button {
+            display: block;
+            width: 200px;
+            margin: 20px auto;
+            font-size: 1.5em;
+            color: #000;
+        }
+    </style>
+</head>
+<body>
+    <h1 id="routineName">Routine Details</h1>
+
+    <div id="routineSummary"></div>
+
+    <div id="workoutDetails">
+        <!-- Workout details will be displayed here -->
+    </div>
+
+    <p id="log" style="color: #333; font-size: 20px; font-weight: bold;"></p>
+
+    <div id="buttons">
+        <button id="increaseRepetitionsButton">Increase Repetitions</button>
+        <button id="increaseDurationButton">Increase Duration</button>
+        <button id="increaseRestTimeButton">Increase Rest Time</button>
+        <button id="startButton">Start Routine</button>
+        <button id="exitButton">Exit</button>
+    </div>
+
+    <script src="/scripts/routine-details.js" type="module"></script>
+
+    <script type="module">
+        import { handleIncreaseRepetitionsClick } from '/scripts/routine-details.js';
+        import { handleIncreaseDurationClick } from '/scripts/routine-details.js';
+        import { handleIncreaseRestTimeClick } from '/scripts/routine-details.js';
+        
+        document.getElementById('increaseRepetitionsButton').addEventListener('click', handleIncreaseRepetitionsClick);
+        document.getElementById('increaseDurationButton').addEventListener('click', handleIncreaseDurationClick);
+        document.getElementById('increaseRestTimeButton').addEventListener('click', handleIncreaseRestTimeClick);
+        
+    </script>
+</body>
+</html>
