@@ -1,0 +1,137 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <title>Forums</title>
+
+  <script src="/scripts/navigation.js" defer></script>
+  <style>
+    body {
+      font-family: 'Arial', sans-serif;
+      line-height: 1.6;
+      color: #fff; 
+      margin: 0;
+      padding: 20px;
+    }
+
+    h1 {
+      text-align: center;
+    }
+
+    .input-group label {
+      display: block;
+      margin-bottom: 5px;
+      color: #FFC107; 
+    }
+
+    .input-group input, .input-group textarea, .input-group select {
+      width: 100%;
+      padding: 10px;
+      margin-bottom: 20px;
+      border-radius: 5px;
+      border: 1px solid #aaa;
+      background-color: #555; 
+      color: #fff; 
+    }
+
+    button {
+      background-color: #FFC107; 
+      color: #000; 
+      padding: 10px 15px;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    button:hover {
+      background-color: #FFA000; 
+    }
+
+    .post {
+      background-color: #1E1E1E; 
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2); 
+      margin-bottom: 20px;
+    }
+
+    .post-header, .post-actions, .comment {
+      padding: 15px;
+    }
+
+    .post-info h2 {
+      margin-top: 0;
+      color: #FFC107; 
+    }
+
+    .post-content {
+      background-color: #333; 
+      border-radius: 5px; 
+      padding: 10px; 
+      margin: 0 15px; 
+      color: #fff; 
+    }
+
+    .comment {
+      background-color: #252525; 
+      border-radius: 5px;
+      margin-top: 10px;
+    }
+
+    .comment h3 {
+      color: #FFC107; 
+    }
+
+    .comment p, .comment small {
+      color: #ddd; 
+    }
+
+    .new-post-container {
+      background-color: #333; 
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.2);
+    }
+
+    #characterCount {
+      margin-top: 5px;
+      text-align: right;
+      color: #aaa; 
+    }
+
+  </style>
+
+</head>
+
+<body>
+  
+  <div id="navigation"></div>
+
+  <h1>Forums</h1>
+
+  <div class="container new-post-container">
+    <form id="newPostForm">
+        <div class="input-group">
+            <label for="topic">Topic</label>
+            <input type="text" id="topic" placeholder="Topic" required>
+        </div>
+        <div class="input-group">
+            <label for="content">Post</label>
+            <textarea id="content" placeholder="What's on your mind?" oninput="updateCharacterCount()" required rows="10"></textarea>
+            <div id="characterCount">0 / 2000</div>
+        </div>
+        <button type="submit">Post</button>
+    </form>
+  </div>
+
+  <div class="container">
+    <div id="posts"></div>
+  </div>
+  
+  <script src="/scripts/forum.js"></script>
+</body>
+
+</html>

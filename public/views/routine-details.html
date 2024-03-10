@@ -6,7 +6,6 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="/css/style.css">
     <title>Routine Details</title>
-    <script src="/scripts/navigation.js" defer></script>
     <style>
         .workout-details {
             display: flex;
@@ -24,12 +23,44 @@
             font-size: 1.5em;
             color: #000;
         }
+
+        .timeline {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+        
+        .timeline-step {
+            width: 100px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            text-align: center;
+        }
+        
+        .timeline-step-number {
+            display: block;
+            font-size: 20px;
+            font-weight: bold;
+        }
+        
+        .timeline-step-name {
+            display: block;
+            font-size: 14px;
+        }
+
+        .timeline-step-completed {
+            background-color: #fff700;
+        }
     </style>
 </head>
 <body>
     <h1 id="routineName">Routine Details</h1>
 
     <div id="routineSummary"></div>
+
+    <div id="routineWorkouts"></div>
 
     <div id="workoutDetails">
         <!-- Workout details will be displayed here -->

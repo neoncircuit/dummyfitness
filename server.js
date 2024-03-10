@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const User = require('./models/user');
 const Feedback = require('./models/feedback-schema');
+const Post = require('./models/forum-schema');
 
 require('dotenv').config();
 
@@ -23,7 +24,8 @@ app.use(bodyParser.json());
 app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
-  saveUninitialized: false
+  saveUninitialized: false,
+  cookie: { secure: false }
 }));
 
 app.use(function(err, req, res, next) {
@@ -78,8 +80,36 @@ app.get('/routine-details', checkAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'views', 'routine-details.html'));
 });
 
+
 app.get('/feedback', checkAuthenticated, (req, res) => {
     res.sendFile(path.join(__dirname, 'public', 'views', 'feedback.html'));
+});
+
+app.get('/forum', async (req, res) => {
+  try {
+      const posts = await Post.find().populate('author.id').populate('comments.author');
+      const currentUser = await User.findById(req.session.userId); // Define currentUser
+      res.json({ posts, currentUser });
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+app.get('/forums', checkAuthenticated, (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views', 'forum.html'));
+});
+
+app.get('/profile', checkAuthenticated, async (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views', 'profile.html'));
+});
+
+app.get('/user', checkAuthenticated, async (req, res) => {
+  try {
+      const user = await User.findById(req.user._id);
+      res.json(user);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
 });
 
 app.get('/register', (req, res) => {
@@ -108,6 +138,65 @@ app.get('/check-session', async (req, res) => {
   }
 });
 
+app.post('/forum', checkAuthenticated, async (req, res) => {
+  try {
+      const post = new Post({
+          topic: req.body.topic,
+          content: req.body.content,
+          author: {
+              id: req.user._id,
+              username: req.user.username,
+              country: req.user.country
+          }
+      });
+      await post.save();
+      res.status(201).json(post);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+app.put('/forum/:id', async (req, res) => {
+  try {
+      const post = await Post.findById(req.params.id);
+      if (!post) {
+          return res.status(404).json({ message: 'Post not found' });
+      }
+      if (post.author.id.toString() !== req.session.userId) {
+          return res.status(403).json({ message: 'Not authorized' });
+      }
+      post.content = req.body.content;
+      await post.save();
+      res.json(post);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+app.delete('/forum/:id', async (req, res) => {
+  try {
+      const post = await Post.findById(req.params.id);
+      if (!post) {
+          return res.status(404).json({ message: 'Post not found' });
+      }
+      if (post.author.id.toString() !== req.session.userId) {
+          return res.status(403).json({ message: 'Not authorized' });
+      }
+      await Post.deleteOne({ _id: req.params.id });
+      res.json({ message: 'Post deleted' });
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+app.put('/user', checkAuthenticated, async (req, res) => {
+  try {
+      const updatedUser = await User.findByIdAndUpdate(req.user._id, req.body, { new: true });
+      res.json(updatedUser);
+  } catch (err) {
+      res.status(400).json({ message: err.message });
+  }
+});
 
 app.post('/submit-feedback', async (req, res) => {
   console.log('Received request to /submit-feedback with body:', req.body);
@@ -140,22 +229,29 @@ app.post('/submit-feedback', async (req, res) => {
 
 app.post('/register', async (req, res) => {
   const { username, password, email, firstName, lastName, region, country, age, exerciseFrequency, fitnessGoals} = req.body;
-  const hashedPassword = await bcrypt.hash(password, 10);
-
-  const user = new User({
-    username: username,
-    password: hashedPassword,
-    email: email,
-    firstName: firstName,
-    lastName: lastName,
-    region: region,
-    country: country,
-    age: age,
-    exerciseFrequency: exerciseFrequency,
-    fitnessGoals: fitnessGoals,
-  });
-
+  
   try {
+    // Check if a user with the given username or email already exists
+    const existingUser = await User.findOne({ $or: [{ username }, { email }] });
+    if (existingUser) {
+      return res.status(400).json({ message: 'Username or email already in use' });
+    }
+
+    const hashedPassword = await bcrypt.hash(password, 10);
+
+    const user = new User({
+      username: username,
+      password: hashedPassword,
+      email: email,
+      firstName: firstName,
+      lastName: lastName,
+      region: region,
+      country: country,
+      age: age,
+      exerciseFrequency: exerciseFrequency,
+      fitnessGoals: fitnessGoals,
+    });
+
     const savedUser = await user.save();
     req.session.userId = savedUser._id;
     res.status(201).json({ message: 'User registered successfully' });
@@ -181,6 +277,7 @@ app.post('/login', async (req, res) => {
       if (result === true) {
         try {
           req.session.userId = user._id;
+          console.log('req.session.userId:', req.session.userId);
           res.status(200).send('Logged in!');
         } catch (err) {
           console.error('Error setting session userId:', err);

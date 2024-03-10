@@ -25,7 +25,8 @@ function displayRoutines(routinesToDisplay) {
     <div class="routine-content">
         <h2>${routine.name}</h2>
         <p style="color: black;">${routine.description}</p>
-        <p style="color: black;>Progress: ${routine.progressStatus}</p> 
+        <p style="color: black;>Progress: ${routine.progressStatus}</p>
+        <p style="color: black;">Points: ${routine.totalPoints}</p> 
         <button class="resetProgress" style="display: none;">Reset Progress</button>
       </div>
     `;

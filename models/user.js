@@ -10,6 +10,7 @@ const UserSchema = new mongoose.Schema({
     age: { type: Number, required: true },
     exerciseFrequency: { type: String },
     fitnessGoals: { type: String },
+    profilePicture: { type: String, default: '/public/assets/icons/profile.jpg' }, 
 });
 
 module.exports = mongoose.model('User', UserSchema);

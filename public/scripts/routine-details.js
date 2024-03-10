@@ -18,11 +18,45 @@ const routineName = decodeURIComponent(urlParams.get('name'));
 const selectedRoutine = routines.find(routine => routine.name === routineName);
 
 async function startRoutine(routine) {
+    // Check if routine is undefined
+    if (!routine) {
+        console.error('Error: routine is undefined');
+        return;
+    }
+
     console.log(`Starting selected routine... ${routine.name} `);
 
     const routineNameElement = document.getElementById('routineName');
     routineNameElement.textContent = routine.name;
-  
+
+    const routineWorkoutsElement = document.getElementById('routineWorkouts');
+
+    // Check if routine.workouts is undefined
+    if (!routine.workouts) {
+        console.error('Error: routine.workouts is undefined');
+        routineWorkoutsElement.innerHTML = '<p>No workouts in this routine.</p>';
+    } else {
+        routineWorkoutsElement.innerHTML = `
+        <h3>Workouts in this routine:</h3>
+        <div class="timeline">
+            ${routine.workouts.map((workout, index) => {
+                // Check if workout is undefined
+                if (!workout) {
+                    console.error(`Error: workout at index ${index} is undefined`);
+                    return '';
+                }
+
+                return `
+                    <div class="timeline-step" id="timeline-step-${index}">
+                        <span class="timeline-step-number">${index + 1}</span>
+                        <span class="timeline-step-name">${workout.name}</span>
+                    </div>
+                `;
+            }).join('')}
+        </div>
+    `;
+    }
+
     additionalRepetitions = 0;
     additionalDuration = 0; 
 
@@ -31,7 +65,7 @@ async function startRoutine(routine) {
         const workout = routine.workouts[i];
         
         // Scenario 2: Perform the workout
-        await performWorkout(workout);
+        await performWorkout(workout, i);
   
         // Scenario 3: Rest period (if not the last workout)
         if (i < routine.workouts.length - 1) {
@@ -42,10 +76,10 @@ async function startRoutine(routine) {
     // Scenario 4: Routine completed
     alert(`Congratulations! You have completed your routine: ${routine.name}.`);
     
-    window.location.href = 'http://localhost:3000/routines';
+    window.location.href = '/routines';
 }
 
-async function performWorkout(workout) {
+async function performWorkout(workout, index) {
     console.log(`Starting ${workout.name}...`);
     
     // Reset the increaseRepetitionsCount and increaseDurationCount at the start of each workout
@@ -56,12 +90,22 @@ async function performWorkout(workout) {
     // Display workout name, targeted muscle group, and type
     const workoutDetailsElement = document.getElementById('workoutDetails');
     workoutDetailsElement.innerHTML = `
-        <h2>${workout.name}</h2>
-        <p>Targeted Muscle Group: ${workout.category}</p>
-        <p>Type: ${workout.type}</p>
-        <p id="workoutTimer"></p>
-        <p id="workoutCounter"></p>
-    `;
+    <h2>${workout.name}</h2>
+    <p>Targeted Muscle Group: ${workout.category}</p>
+    <p>Type: ${workout.type}</p>
+    <div style="display: flex; justify-content: space-between;">
+        <video width="400" height="400" controls loop autoplay>
+            <source src="${workout.videos.front}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+        <video width="400" height="400" controls loop autoplay>
+            <source src="${workout.videos.side}" type="video/mp4">
+            Your browser does not support the video tag.
+        </video>
+    </div>
+    <p id="workoutTimer"></p>
+    <p id="workoutCounter"></p>
+`;
     workoutDetailsElement.className = 'workout-details';
 
     // Get the workout timer element
@@ -105,6 +149,7 @@ async function performWorkout(workout) {
                 durationCount--;
                 if (durationCount === 0) {
                     clearInterval(durationIntervalId);
+                    document.getElementById(`timeline-step-${index}`).classList.add('timeline-step-completed');
                     resolve(); // Resolve the promise when durationCount reaches 0
                 }
             }, 1000); // Run every second
@@ -125,6 +170,7 @@ async function performWorkout(workout) {
                 isStartPosition = !isStartPosition; // Toggle the position
                 if (count === 0) {
                     clearInterval(intervalId);
+                    document.getElementById(`timeline-step-${index}`).classList.add('timeline-step-completed');
                     resolve(); // Resolve the promise when count reaches 0
                 }
             }, 4000); // Run every 4 seconds
@@ -138,6 +184,7 @@ async function performWorkout(workout) {
         }
     });
 }
+
 
 function startRestTimer(duration) {
     return new Promise(resolve => {
@@ -254,7 +301,7 @@ function handleExitButtonClick() {
     
     if (confirmExit) {
         console.log('Routine progress reset. Redirecting to routines page...');
-        window.location.href = 'http://localhost:3000/routines';
+        window.location.href = '/routines';
     }
 }
 

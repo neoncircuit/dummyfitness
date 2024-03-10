@@ -69,13 +69,19 @@ document.getElementById('register-form').addEventListener('submit', function(eve
       fitnessGoals: fitnessGoals,
     }),
   })
-  .then(response => response.json())
+  .then(response => {
+    if (!response.ok) {
+      throw new Error(`HTTP error! status: ${response.status}`);
+    }
+    return response.json();
+  })
   .then(data => {
     console.log('User registered: ', data);
     window.location.href = '/login';
   })
   .catch((error) => {
     console.error('Error:', error);
+    document.getElementById('error-message').textContent = 'Username, password, or email have already been registered.';
   });
 });
 

@@ -22,6 +22,21 @@ class Workout {
             description: action,
             image: `/assets/icons/tip.png`
         }));
+
+        // Assign points based on difficulty
+        switch (this.difficulty.toLowerCase()) {
+            case 'beginner':
+                this.points = 5;
+                break;
+            case 'intermediate':
+                this.points = 10;
+                break;
+            case 'advanced':
+                this.points = 20;
+                break;
+            default:
+                this.points = 0;
+        }
     }
 }
   
@@ -63,6 +78,46 @@ const workouts = [
         ]       
     ),
 
+    new Workout(
+        `Push Ups`,
+        `A classic bodyweight exercise that targets the chest, triceps, and shoulders. It also engages the core and promotes upper body strength.`,
+        `Beginner`,
+        [
+            `Chest`,
+            `Triceps`,
+            `Shoulders`,
+            `Core`
+        ],
+        `incremental`,
+        [
+            `Start in a plank position with your hands placed slightly wider than shoulder-width apart.`,
+            `Keep your body in a straight line from head to heels.`,
+            `Lower your chest toward the ground by bending your elbows. Keep your elbows close to your body.`,
+            `Stop when your chest is just above the ground or as far as you can comfortably go.`,
+            `Push back up to the starting position by straightening your arms.`,
+        ],
+        [
+            `Maintain a neutral spine: Avoid arching your back or sagging your hips during the movement.`,
+            `Elbows at 45-degree angle: Keep your elbows close to your body to engage the triceps effectively.`,
+            `Full Range of Motion: Lower your chest as close to the ground as possible without compromising form.`
+        ],
+        [
+            `Incomplete Range: Not going low enough or not fully extending the arms reduces the effectiveness.`,
+            `Sagging Hips: Keep your core engaged to prevent your hips from sagging.`,
+            `Improper Hand Placement: Ensure your hands are directly under your shoulders for proper alignment.`
+        ],
+        { 
+            front: `/assets/videos/male-Bodyweight-push-up-front.mp4`, 
+            side: `/assets/videos/male-Bodyweight-push-up-side.mp4` 
+        },
+        [
+            `If regular push-ups are challenging, you can modify them by doing knee push-ups.<br>
+            Place your knees on the ground while maintaining a straight line from head to knees.<br>
+            Perform the same push-up motion with your knees as the pivot point.<br>
+            As you get stronger, gradually progress to full push-ups on your toes.`
+        ]
+    ),
+    
     new Workout(
         `Jumping Jacks`,
         `A full-body exercise that increases aerobic fitness, strengthens the body, and promotes relaxation of the mind.`,
@@ -430,7 +485,8 @@ const workouts = [
             `If you are having trouble holding a side plank position, you can try to modify it by placing your bottom knee on the floor, or by stacking your feet or placing them in a staggered stance.<br> 
             This will reduce the amount of weight on your core and make it easier to keep your hips lifted.<br> 
             You can also focus on your breathing and tighten your abs and obliques to prevent your hips from dropping or twisting12.`
-        ]
+        ] 
+        
     ),
 
     new Workout(
@@ -469,6 +525,7 @@ const workouts = [
             This will reduce the amount of weight on your core and make it easier to keep your hips lifted.<br> 
             You can also focus on your breathing and tighten your abs and obliques to prevent your hips from dropping or twisting.`
         ]
+        
     ),
 
     new Workout(
@@ -510,6 +567,7 @@ const workouts = [
             You can also step back and forward instead of jumping, or use a bench or a ball to elevate your hands.<br> 
             You can also do the exercise at a slower pace or with fewer repetitions.`
         ]
+        
     ),
 
     new Workout(

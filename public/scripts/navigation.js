@@ -14,6 +14,7 @@ const navigationContent = `
                 <li><a href="/calorie">Calories Calculator</a></li>
             </ul>
         </li>
+        <li><a href="/forums">Forums</a></li>
         <li><a href="/feedback">Feedback</a></li>
         <li id="user-nav"></li>
     </ul>
@@ -51,7 +52,7 @@ document.addEventListener('DOMContentLoaded', function() {
       const navBar = document.getElementById('user-nav');
       if (data.loggedIn) {
         navBar.innerHTML = `
-          <p>Welcome, ${data.firstName}!</p>
+          <p>Welcome back, <a href="/profile">${data.firstName}!</p>
           <button id="logout-button">Logout</button>
         `;
         document.getElementById('logout-button').addEventListener('click', logout);

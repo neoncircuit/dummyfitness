@@ -33,7 +33,12 @@
       color: #333; /* Ensure text is readable on colored backgrounds */
     }
 
-    /* Search Bar Styles */
+    .search-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }    
+    
     #searchBar {
       height: 40px; 
       color: black; 
@@ -42,6 +47,11 @@
       border: 1px solid #ddd;
       border-radius: 5px;
       margin-bottom: 10px; 
+      flex-grow: 1;
+    }
+
+    #createRoutineButton {
+      margin-left: 10px;
     }
   </style>
 </head>
@@ -52,7 +62,9 @@
   <h1>Routines</h1>
 
   <!-- Add the search bar input element -->
-  <input type="text" id="searchBar" placeholder="Search for routines...">
+  <div class="search-container">
+    <input type="text" id="searchBar" placeholder="Search for routines...">
+  </div>
 
   <div class="routines-container">
     <!-- Content for the routines page -->
