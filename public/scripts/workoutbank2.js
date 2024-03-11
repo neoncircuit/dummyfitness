@@ -127,7 +127,7 @@ const workouts = [
             `Hip Abductors`,
             `Shoulders`
         ],     
-        `incremental`,
+        `timed`,
         [
             `Stand upright with your legs together and arms at your sides.`, 
             `Bend your knees slightly, and jump into the air.`, 

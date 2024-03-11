@@ -7,7 +7,7 @@ const bcrypt = require('bcrypt');
 const session = require('express-session');
 const User = require('./models/user');
 const Feedback = require('./models/feedback-schema');
-const Post = require('./models/forum-schema');
+const { Comment, Post } = require('./models/forum-schema');
 
 require('dotenv').config();
 
@@ -18,6 +18,10 @@ db.once('open', function() {
   console.log('Connected to MongoDB');
 });
 
+User.updateMany({ points: { $in: [null, undefined] } }, { points: 0 })
+  .then(() => console.log('Users updated successfully'))
+  .catch(err => console.error('Error updating users:', err));
+
 const app = express();
 app.use(bodyParser.json());
 
@@ -27,11 +31,6 @@ app.use(session({
   saveUninitialized: false,
   cookie: { secure: false }
 }));
-
-app.use(function(err, req, res, next) {
-  console.error(err.stack);
-  res.status(500).send('Something broke!');
-});
 
 // Serve static files from the "public" directory
 app.use(express.static(path.join(__dirname, 'public')));
@@ -87,7 +86,7 @@ app.get('/feedback', checkAuthenticated, (req, res) => {
 
 app.get('/forum', async (req, res) => {
   try {
-      const posts = await Post.find().populate('author.id').populate('comments.author');
+      const posts = await Post.find().populate('author.id', 'username country').populate('comments.author.id', 'username country');
       const currentUser = await User.findById(req.session.userId); // Define currentUser
       res.json({ posts, currentUser });
   } catch (err) {
@@ -138,6 +137,38 @@ app.get('/check-session', async (req, res) => {
   }
 });
 
+app.get('/api/user', async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+    res.json({ user });
+  } catch (err) {
+    console.error('Error fetching user:', err);
+    res.status(500).json({ message: 'Error fetching user' });
+  }
+});
+
+app.put('/api/user', async (req, res) => {
+  try {
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Update the user's points
+    user.points = req.body.points;
+
+    // Save the user
+    await user.save();
+    res.json({ message: 'User saved successfully', user });
+  } catch (err) {
+    console.error('Error updating user:', err);
+    res.status(500).json({ message: 'Error updating user' });
+  }
+});
+
 app.post('/forum', checkAuthenticated, async (req, res) => {
   try {
       const post = new Post({
@@ -184,6 +215,110 @@ app.delete('/forum/:id', async (req, res) => {
       }
       await Post.deleteOne({ _id: req.params.id });
       res.json({ message: 'Post deleted' });
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+app.post('/forum/:id/like', checkAuthenticated, async (req, res) => {
+  try {
+      const post = await Post.findById(req.params.id);
+      if (!post) {
+          return res.status(404).json({ message: 'Post not found' });
+      }
+      const userId = req.session.userId;
+      if (post.likedBy.includes(userId)) {
+          post.likes -= 1;
+          post.likedBy.pull(userId);
+      } else {
+          post.likes += 1;
+          post.likedBy.push(userId);
+      }
+      await post.save();
+      res.json(post);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+app.post('/forum/:id/dislike', checkAuthenticated, async (req, res) => {
+  try {
+      const post = await Post.findById(req.params.id);
+      if (!post) {
+          return res.status(404).json({ message: 'Post not found' });
+      }
+      const userId = req.session.userId;
+      if (post.dislikedBy.includes(userId)) {
+          post.dislikes -= 1;
+          post.dislikedBy.pull(userId);
+      } else {
+          post.dislikes += 1;
+          post.dislikedBy.push(userId);
+      }
+      await post.save();
+      res.json(post);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+// Create a new comment
+app.post('/forum/:postId/comments', checkAuthenticated, async (req, res) => {
+  try {
+      const post = await Post.findById(req.params.postId);
+      if (!post) {
+          return res.status(404).json({ message: 'Post not found' });
+      }
+      const comment = new Comment({
+          content: req.body.content,
+          author: {
+              id: req.user._id,
+              username: req.user.username,
+              country: req.user.country
+          },
+          post: post._id,
+          date: new Date()
+      });
+      await comment.save();
+      post.comments.push(comment);
+      await post.save();
+      res.json(comment);
+  } catch (err) {
+      console.error(err);
+      res.status(500).json({ message: err.message });
+  }
+});
+
+// Edit a comment
+app.put('/forum/comments/:commentId', checkAuthenticated, async (req, res) => {
+  try {
+      const comment = await Comment.findById(req.params.commentId);
+      if (!comment) {
+          return res.status(404).json({ message: 'Comment not found' });
+      }
+      if (comment.author.toString() !== req.session.userId) {
+          return res.status(403).json({ message: 'Not authorized' });
+      }
+      comment.content = req.body.content;
+      await comment.save();
+      res.json(comment);
+  } catch (err) {
+      res.status(500).json({ message: err.message });
+  }
+});
+
+// Delete a comment
+app.delete('/forum/comments/:commentId', checkAuthenticated, async (req, res) => {
+  try {
+      const comment = await Comment.findById(req.params.commentId);
+      if (!comment) {
+          return res.status(404).json({ message: 'Comment not found' });
+      }
+      if (comment.author.toString() !== req.session.userId) {
+          return res.status(403).json({ message: 'Not authorized' });
+      }
+      await comment.remove();
+      res.json({ message: 'Comment deleted' });
   } catch (err) {
       res.status(500).json({ message: err.message });
   }
@@ -321,6 +456,11 @@ async function checkAuthenticated(req, res, next) {
     res.redirect('/login');
   }
 }
+
+app.use(function(err, req, res, next) {
+  console.error(err.stack);
+  res.status(500).send('Something broke!');
+});
 
 // Start the server
 const port = process.env.PORT || 3000;

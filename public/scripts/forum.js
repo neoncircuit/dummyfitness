@@ -16,7 +16,7 @@ function createPostElement(post, currentUser) {
             <div class="post-actions">
                 <button onclick="likePost('${post._id}')">Like</button>
                 <button onclick="dislikePost('${post._id}')">Dislike</button>
-                <span>${post.likes} likes, ${post.dislikes} dislikes</span>
+                <span id="likes-${post._id}">${post.likes} likes</span>, <span id="dislikes-${post._id}">${post.dislikes} dislikes</span>
                 ${post.author.username === currentUser.username ? `<button onclick="editPost('${post._id}')">Edit</button><button onclick="deletePost('${post._id}')">Delete</button>` : ''}
             </div>
             <div id="comments-${post._id}">
@@ -25,6 +25,7 @@ function createPostElement(post, currentUser) {
                         <h3>${comment.author.username}</h3>
                         <p>${comment.content}</p>
                         <small>${new Date(comment.date).toLocaleString()}</small>
+                        ${comment.author._id === currentUser._id ? `<button onclick="editComment('${comment._id}')">Edit</button><button onclick="deleteComment('${comment._id}')">Delete</button>` : ''}
                     </div>
                 `).join('')}
             </div>
@@ -64,6 +65,51 @@ async function submitPost(event) {
     fetchAndDisplayPosts(); // Refresh posts
     document.getElementById('topic').value = '';
     document.getElementById('content').value = '';
+}
+
+async function submitComment(event, postId) {
+    event.preventDefault();
+    const content = document.getElementById(`comment-${postId}`).value;
+    const response = await fetch(`/forum/${postId}/comments`, {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: content }),
+    });
+    if (response.ok) {
+        fetchAndDisplayPosts(); // Refresh posts
+        document.getElementById(`comment-${postId}`).value = '';
+    } else {
+        console.error(`Error: ${response.status}`);
+    }
+}
+
+async function editComment(commentId) {
+    const newContent = prompt('Enter new content for the comment:');
+    const response = await fetch(`/forum/comments/${commentId}`, {
+        method: 'PUT',
+        headers: {
+            'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ content: newContent }),
+    });
+    if (response.ok) {
+        fetchAndDisplayPosts(); // Refresh posts
+    } else {
+        console.error(`Error: ${response.status}`);
+    }
+}
+
+async function deleteComment(commentId) {
+    const response = await fetch(`/forum/comments/${commentId}`, {
+        method: 'DELETE',
+    });
+    if (response.ok) {
+        fetchAndDisplayPosts(); // Refresh posts
+    } else {
+        console.error(`Error: ${response.status}`);
+    }
 }
 
 // Function to edit a post
@@ -111,25 +157,25 @@ async function fetchAndDisplayPosts() {
     }
 }
 
-// Function to like a post
 async function likePost(postId) {
     const response = await fetch(`/forum/${postId}/like`, {
         method: 'POST',
     });
     if (response.ok) {
-        fetchAndDisplayPosts(); // Refresh posts
+        const post = await response.json();
+        document.getElementById(`likes-${postId}`).textContent = `${post.likes} likes`;
     } else {
         console.error(`Error: ${response.status}`);
     }
 }
 
-// Function to dislike a post
 async function dislikePost(postId) {
     const response = await fetch(`/forum/${postId}/dislike`, {
         method: 'POST',
     });
     if (response.ok) {
-        fetchAndDisplayPosts(); // Refresh posts
+        const post = await response.json();
+        document.getElementById(`dislikes-${postId}`).textContent = `${post.dislikes} dislikes`;
     } else {
         console.error(`Error: ${response.status}`);
     }

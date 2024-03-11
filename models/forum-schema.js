@@ -7,9 +7,13 @@ const CommentSchema = new Schema({
         required: true
     },
     author: {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: 'User',
-        required: true
+        id: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: 'User',
+            required: true
+        },
+        username: String,
+        country: String
     },
     post: {
         type: mongoose.Schema.Types.ObjectId,
@@ -23,17 +27,25 @@ const CommentSchema = new Schema({
 });
 
 const PostSchema = new Schema({
-    topic: { type: String, required: true }, // New field for the topic
-    content: { type: String, required: true, maxlength: 2000 }, // Character limit for the content
+    topic: { type: String, required: true },
+    content: { type: String, required: true, maxlength: 2000 },
     author: { 
         id: { type: Schema.Types.ObjectId, ref: 'User', required: true },
         username: String,
         country: String
     },
     likes: { type: Number, default: 0 },
-    dislikes: { type: Number, default: 0 }, // New field for dislikes
-    comments: [CommentSchema], // Use CommentSchema for comments
+    dislikes: { type: Number, default: 0 },
+    likedBy: { type: [Schema.Types.ObjectId], ref: 'User', default: [] },
+    dislikedBy: { type: [Schema.Types.ObjectId], ref: 'User', default: [] },
+    comments: [CommentSchema],
     date: { type: Date, default: Date.now }
 });
 
-module.exports = mongoose.model('Post', PostSchema);
+const Comment = mongoose.model('Comment', CommentSchema);
+const Post = mongoose.model('Post', PostSchema);
+
+module.exports = {
+    Comment,
+    Post
+};

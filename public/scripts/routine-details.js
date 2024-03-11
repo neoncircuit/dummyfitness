@@ -7,6 +7,7 @@ let increaseRestTimeCount = 0; // Variable to track the number of times increase
 let additionalRepetitions = 0; // Additional repetitions added by the "Increase Repetitions" button
 let additionalRestTime = 0; // Additional rest time added by the "Increase Rest Time" button
 let additionalDuration = 0; // Additional duration added by the "Increase Duration" button
+let pointsEarned = 0;
 
 // Get the URL parameters
 const urlParams = new URLSearchParams(window.location.search);
@@ -18,6 +19,9 @@ const routineName = decodeURIComponent(urlParams.get('name'));
 const selectedRoutine = routines.find(routine => routine.name === routineName);
 
 async function startRoutine(routine) {
+
+    console.log('Initial pointsEarned:', pointsEarned);
+
     // Check if routine is undefined
     if (!routine) {
         console.error('Error: routine is undefined');
@@ -58,25 +62,58 @@ async function startRoutine(routine) {
     }
 
     additionalRepetitions = 0;
-    additionalDuration = 0; 
+    additionalDuration = 0;  
+
+    const totalRoutinePoints = selectedRoutine.workouts.reduce((total, workout) => total + workout.points, 0);
+    console.log('totalRoutinePoints:', totalRoutinePoints);
 
     // Iterate over each workout in the routine
     for (let i = 0; i < routine.workouts.length; i++) {
         const workout = routine.workouts[i];
         
+        console.log('pointsEarned before performWorkout:', pointsEarned);
         // Scenario 2: Perform the workout
-        await performWorkout(workout, i);
+        pointsEarned = await performWorkout(workout, i);
   
+        console.log('pointsEarned after performWorkout:', pointsEarned);
         // Scenario 3: Rest period (if not the last workout)
         if (i < routine.workouts.length - 1) {
             await startRestTimer(30);
         }
     }
-    
+
+    //pointsEarned += totalRoutinePoints;
+    console.log('pointsEarned after all workouts:', pointsEarned);
+
     // Scenario 4: Routine completed
     alert(`Congratulations! You have completed your routine: ${routine.name}.`);
+
+    // Update the user's points in the database
+    getUser().then(user => {
+        if (!user) {
+            console.error('Error: User not found');
+            return;
+        }
     
-    window.location.href = '/routines';
+        console.log('user.points:', user.points);
+        let userPoints = Number(user.points);
+        if (isNaN(userPoints)) {
+            console.error('Error: user.points is not a number:', user.points);
+            userPoints = 0;
+        }
+        console.log('pointsEarned:', pointsEarned);
+        user.points = userPoints + pointsEarned;
+
+        console.log('User after updating points:', user);
+
+        console.log('User before saving:', user);
+        saveUser(user).then(() => {
+            console.log('User saved successfully');
+            window.location.href = '/routines';
+        });
+    }).catch(error => {
+        console.error('Error fetching user:', error);
+    });
 }
 
 async function performWorkout(workout, index) {
@@ -150,7 +187,8 @@ async function performWorkout(workout, index) {
                 if (durationCount === 0) {
                     clearInterval(durationIntervalId);
                     document.getElementById(`timeline-step-${index}`).classList.add('timeline-step-completed');
-                    resolve(); // Resolve the promise when durationCount reaches 0
+                    //resolve(); // Resolve the promise when durationCount reaches 0
+                    resolve(pointsEarned);
                 }
             }, 1000); // Run every second
         }
@@ -171,17 +209,44 @@ async function performWorkout(workout, index) {
                 if (count === 0) {
                     clearInterval(intervalId);
                     document.getElementById(`timeline-step-${index}`).classList.add('timeline-step-completed');
-                    resolve(); // Resolve the promise when count reaches 0
+                    //resolve(); // Resolve the promise when count reaches 0
+                    resolve(pointsEarned);
                 }
             }, 4000); // Run every 4 seconds
+        }
+
+        
+
+        // Add additional points for increasing repetitions/duration
+        let additionalPoints;
+        switch (workout.difficulty) {
+            case 'Beginner':
+            additionalPoints = 2;
+            break;
+            case 'Intermediate':
+            additionalPoints = 3;
+            break;
+            case 'Advanced':
+            additionalPoints = 4;
+            break;
+            default:
+            additionalPoints = 0;
         }
 
         // Hide the workout counter for timed workouts and the workout timer for incremental workouts
         if (workout.type === 'timed') {
             workoutCounterElement.style.display = 'none';
+            console.log('increaseDurationCount * additionalPoints:', increaseDurationCount * additionalPoints);
+            pointsEarned += increaseDurationCount * additionalPoints;
         } else if (workout.type === 'incremental') {
             workoutTimerElement.style.display = 'none';
+            console.log('increaseRepetitionsCount * additionalPoints:', increaseRepetitionsCount * additionalPoints);
+            pointsEarned += increaseRepetitionsCount * additionalPoints;
         }
+
+        console.log('workout.points:', workout.points);
+        pointsEarned += workout.points;
+        return pointsEarned;
     });
 }
 
@@ -256,6 +321,25 @@ export function handleIncreaseRepetitionsClick() {
         additionalRepetitions += 5;
         console.log('Increase Repetitions Clicked, increaseRepetitionsCount:', increaseRepetitionsCount);
 
+        // Add additional points for increasing repetitions
+        let additionalPoints;
+        switch (selectedRoutine.difficulty) {
+            case 'Beginner':
+            additionalPoints = 2;
+            break;
+            case 'Intermediate':
+            additionalPoints = 3;
+            break;
+            case 'Advanced':
+            additionalPoints = 4;
+            break;
+            default:
+            additionalPoints = 0;
+        }
+        console.log('increaseRepetitionsCount * additionalPoints:', increaseRepetitionsCount * additionalPoints);
+        pointsEarned += increaseRepetitionsCount * additionalPoints;
+        console.log('pointsEarned after increasing repetitions:', pointsEarned);
+
         // Hide the Repetition button after it's clicked twice
         if (increaseRepetitionsCount >= 2) {
             hideButton('increaseRepetitionsButton');
@@ -271,6 +355,25 @@ export function handleIncreaseDurationClick() {
         additionalDuration += 15; // Add 15 seconds to the duration
         console.log('Increase Duration Clicked, increaseDurationCount:', increaseDurationCount);
         
+        // Add additional points for increasing duration
+        let additionalPoints;
+        switch (selectedRoutine.difficulty) {
+            case 'Beginner':
+            additionalPoints = 2;
+            break;
+            case 'Intermediate':
+            additionalPoints = 3;
+            break;
+            case 'Advanced':
+            additionalPoints = 4;
+            break;
+            default:
+            additionalPoints = 0;
+        }
+        console.log('increaseDurationCount * additionalPoints:', increaseDurationCount * additionalPoints);
+        pointsEarned += increaseDurationCount * additionalPoints;
+        console.log('pointsEarned after increasing duration:', pointsEarned);
+
         // Hide the Duration button after it's clicked twice
         if (increaseDurationCount >= 2) {
             hideButton('increaseDurationButton');
@@ -304,6 +407,38 @@ function handleExitButtonClick() {
         window.location.href = '/routines';
     }
 }
+
+function getUser() {
+    return fetch(`/api/user`, {
+      method: 'GET',
+      headers: {
+        'Content-Type': 'application/json',
+        // Include any other headers your server requires for authentication
+      },
+    })
+    .then(response => response.json())
+    .then(data => data.user)
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+  
+function saveUser(user) {
+    return fetch(`/api/user`, {
+      method: 'PUT',
+      headers: {
+        'Content-Type': 'application/json',
+        // Include any other headers your server requires for authentication
+      },
+      body: JSON.stringify(user),
+    })
+    .then(response => response.json())
+    .then(data => console.log('User saved successfully:', data))
+    .catch((error) => {
+      console.error('Error:', error);
+    });
+}
+
 
 window.addEventListener('DOMContentLoaded', () => {
     const startButton = document.getElementById('startButton'); 
