@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+  <title>Routines</title>
+
+  <link rel="stylesheet" href="/css/style.css">
+
+  <script src="/scripts/routines2.js" type="module"></script>
+  <script src="/scripts/navigation.js" defer></script>
+
+  <!-- Add any additional styling or linked files as needed -->
+  <style>
+    /* Add styling for the routine cards */
+    .routine-card {
+      border-radius: 10px;
+      padding: 20px;
+      margin: 20px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.3s ease-in-out;
+      background-color: #f9f9f9;
+    }
+
+    .routine-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .routine-card h2 {
+      font-size: 1.5em;
+      margin-bottom: 10px;
+      color: #333; /* Ensure text is readable on colored backgrounds */
+    }
+
+    .search-container {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      width: 50%;
+    }    
+    
+    #searchBar {
+      height: 40px; 
+      color: black; 
+      padding: 8px; 
+      font-size: 16px; 
+      border: 1px solid #ddd;
+      border-radius: 5px;
+      margin-bottom: 10px; 
+      flex-grow: 1;
+    }
+
+    #createRoutineButton {
+      margin-left: 10px;
+    }
+  </style>
+</head>
+<body>
+
+  <div id="navigation"></div>
+  
+  <h1>Routines</h1>
+  
+  <h2 id="userPoints"></h2>
+
+  <!-- Add the search bar input element -->
+  <div class="search-container">
+    <input type="text" id="searchBar" placeholder="Search for routines...">
+  </div>
+
+  <div class="routines-container">
+    <!-- Content for the routines page -->
+  </div>
+
+</body>
+</html>

@@ -1,0 +1,236 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <title>Body Fat Calculator</title>
+
+  <script src="/scripts/navigation.js" defer></script>
+
+  <style>
+    body {
+        margin: 0;
+    }
+  
+    .container {
+        max-width: 600px;
+        margin: 20px auto;
+        padding: 20px;
+        border-radius: 5px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group {
+        margin-bottom: 20px;
+    }
+
+    label {
+        display: block;
+        margin-bottom: 5px;
+        color: #ffffff;
+    }
+
+    input[type="number"] {
+        width: calc(100% - 20px);
+        padding: 10px;
+        border: 1px solid #fcfcfc;
+        border-radius: 4px;
+    }
+
+    select {
+        color: #000; 
+    }
+
+    select option {
+        color: #000; 
+    }
+
+    #result {
+        line-height: 1.6; 
+    }
+
+    .formula-section {
+        margin-top: 20px;
+        margin-bottom: 20px;
+    }
+
+    .male-equation {
+        color: rgb(0, 168, 132);
+    }
+    
+    .female-equation {
+        color: rgba(255, 0, 43, 0.918);
+    }
+
+    .equation {
+        color: rgba(0, 0, 0, 0.918);
+    }
+
+    table {
+        border-collapse: collapse;
+    }
+    
+    th, td {
+        border: 1px solid black;
+        padding: 10px;
+    }
+
+    h3 {
+        color:rgb(167, 0, 189);
+    }
+  </style>
+</head>
+
+<body>
+  
+    <div id="navigation"></div>
+  
+    <h1>Body Fat Calculator</h1>
+  
+    <div class="container">
+      <label for="unit">Choose unit:</label>
+      <select id="unit">
+        <option value="metric">Metric (kg/cm)</option>
+        <option value="imperial">Imperial (lbs/in)</option>
+      </select>
+  
+      <div class="input-group">
+        <label for="age">Age:</label>
+        <input type="number" id="age" placeholder="Enter your age">
+      </div>
+
+      <div class="input-group">
+        <label for="gender">Gender:</label>
+        <select id="gender">
+          <option value="male">Male</option>
+          <option value="female">Female</option>
+        </select>
+      </div>
+  
+      <div class="input-group">
+        <label for="weight">Weight:</label>
+        <input type="number" id="weight" placeholder="Enter your weight">
+      </div>
+  
+      <div class="input-group">
+        <label for="height">Height:</label>
+        <input type="number" id="height" placeholder="Enter your height">
+      </div>
+
+      <div class="input-group">
+        <label for="neck">Neck:</label>
+        <input type="number" id="neck" placeholder="Enter your neck measurement">
+      </div>
+
+      <div class="input-group">
+        <label for="waist">Waist:</label>
+        <input type="number" id="waist" placeholder="Enter your waist measurement">
+      </div>
+
+      <div class="input-group" id="hip-container">
+        <label for="hip">Hip:</label>
+        <input type="number" id="hip" placeholder="Enter your hip measurement">
+      </div>
+  
+      <div id="result"></div>
+
+    </div>
+
+    <div class="container">
+        <h2>Understanding the Formulas to calculate body fat</h2>
+
+        <div class="formula-section">
+            <h3>US Navy Method</h3>
+            <p><span class="male-equation">For Men: 495 / (1.0324 - 0.19077 * log10(waist - neck) + 0.15456 * log10(height)) - 450</span></p>
+            <p><span class="female-equation">For Women: 495 / (1.29579 - 0.35004 * log10(waist + hip - neck) + 0.22100 * log10(height)) - 450</span></p>
+            <p>The US Navy method estimates body fat percentage using measurements of the neck, waist, and height for men, and the neck, waist, hip, and height for women. It is considered accurate and practical as it only requires a few measurements.</p>
+        </div>
+
+        <div class="formula-section">
+            <h3>BMI Method</h3>
+            <p><span class="male-equation">For Men: 1.20 * bmi + 0.23 * age - 16.2</span></p>
+            <p><span class="female-equation">For Women: 1.20 * bmi + 0.23 * age - 5.4</span></p>
+            <p>The BMI method estimates body fat percentage using the Body Mass Index (BMI) and the age of the individual. It is a simple and quick method, but it may not be as accurate as other methods as it does not take into account the distribution of fat and muscle in the body.</p>
+        </div>
+
+        <div class="formula-section">
+            <h3>Ideal Body weights for each age group</h3>
+            <table>
+                <thead>
+                  <tr>
+                    <th>Age</th>
+                    <th>Ideal Body Fat for Males (%)</th>
+                    <th>Ideal Body Fat for Females (%)</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <td>20 or below</td>
+                    <td>8.5</td>
+                    <td>17.7</td>
+                  </tr>
+                  <tr>
+                    <td>21-25</td>
+                    <td>10.5</td>
+                    <td>18.4</td>
+                  </tr>
+                  <tr>
+                    <td>26-30</td>
+                    <td>12.7</td>
+                    <td>19.3</td>
+                  </tr>
+                  <tr>
+                    <td>31-35</td>
+                    <td>13.7</td>
+                    <td>21.5</td>
+                  </tr>
+                  <tr>
+                    <td>36-40</td>
+                    <td>15.3</td>
+                    <td>22.2</td>
+                  </tr>
+                  <tr>
+                    <td>41-45</td>
+                    <td>16.4</td>
+                    <td>22.9</td>
+                  </tr>
+                  <tr>
+                    <td>46-50</td>
+                    <td>18.9</td>
+                    <td>25.2</td>
+                  </tr>
+                  <tr>
+                    <td>51 and above</td>
+                    <td>20.9</td>
+                    <td>26.3</td>
+                  </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <div class="formula-section">
+            <h3>Body Fat Mass</h3>
+            <p><span class="equation">Body Fat Mass = weight * bodyFatNavy / 100</span></p>
+            <p>This formula calculates the mass of body fat by multiplying the total body weight by the body fat percentage calculated using the US Navy method.</p>
+          </div>
+          
+          <div class="formula-section">
+            <h3>Lean Body Mass</h3>
+            <p><span class="equation">Lean Body Mass = weight - bodyFatMass</span></p>
+            <p>This formula calculates the mass of lean body tissue by subtracting the body fat mass from the total body weight.</p>
+          </div>
+          
+          <div class="formula-section">
+            <h3>Body Fat Required to Lose to Reach Ideal Weight</h3>
+            <p><span class="equation">Body Fat Required to Lose = bodyFatMass - weight * idealBodyFat / 100</span></p>
+            <p>This formula calculates the amount of body fat required to lose to reach the ideal body weight. It subtracts the ideal body fat mass (calculated by multiplying the total body weight by the ideal body fat percentage) from the current body fat mass.</p>
+          </div>
+        
+      </div>
+
+    <script src="/scripts/bodyfat.js"></script>
+
+  </body>
+</html>

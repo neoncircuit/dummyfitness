@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <title>Profile</title>
+
+  <script src="/scripts/navigation.js" defer></script>
+
+  <style>
+    /* Additional styles specific to this page */
+    body {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #ffffff;
+    }
+
+    input, select, button, select option {
+        color: black;
+    }
+
+    #user-info * {
+        margin-bottom: 10px; 
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div id="navigation"></div>
+
+  <h1>Profile Information</h1>
+
+  <div class="container">
+    <div id="user-info">
+        <!-- User information will be inserted here by JavaScript -->
+    </div>
+    
+    <button id="edit-profile-button">Edit Profile</button>
+
+    <form id="edit-user-form" style="display: none;">
+        <label for="username">Username:</label>
+        <input type="text" id="username" name="username">
+
+        <label for="email">Email:</label>
+        <input type="email" id="email" name="email">
+
+        <label for="firstName">First Name:</label>
+        <input type="text" id="firstName" name="firstName">
+
+        <label for="lastName">Last Name:</label>
+        <input type="text" id="lastName" name="lastName">
+
+        <div class="input-group">
+            <label for="region">Region:</label>
+            <select id="region">
+                <option value="North America">North America</option>
+                <option value="South America">South America</option>
+                <option value="Europe">Europe</option>
+                <option value="Asia">Asia</option>
+                <option value="Africa">Africa</option>
+                <option value="Oceania">Oceania</option>
+            </select>
+        </div>
+    
+        <div class="input-group">
+            <label for="country">Country:</label>
+            <select id="country">
+                <option value="">Select a country</option>
+                <!-- More options can be added here -->
+            </select>
+        </div>
+
+        <label for="age">Age:</label>
+        <input type="number" id="age" name="age">
+
+        <label for="exerciseFrequency">Exercise Frequency:</label>
+        <select id="exerciseFrequency">
+            <option value="1">Sedentary (little or no exercise)</option>
+            <option value="2">Lightly active (light exercise/sports 1-3 days/week)</option>
+            <option value="3">Moderately active (moderate exercise/sports 3-5 days/week)</option>
+            <option value="4">Very active (hard exercise/sports 6-7 days a week)</option>
+            <option value="5">Super active (very hard exercise/physical job & exercise 2x/day)</option>
+        </select>
+
+        <label for="fitnessGoals">Fitness Goals:</label>
+        <input type="text" id="fitnessGoals" name="fitnessGoals">
+
+        <button type="submit">Save Changes</button>
+    </form>
+
+  </div>
+  <script src="/scripts/profile.js"></script>
+</body>
+</html>

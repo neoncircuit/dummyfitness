@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <title>BMI Calculator</title>
+
+  <script src="/scripts/bmi.js"></script>
+  <script src="/scripts/navigation.js" defer></script>
+
+  <style>
+    /* Additional styles specific to this page */
+    body {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #ffffff;
+    }
+
+    input[type="number"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      border: 1px solid #fcfcfc;
+      border-radius: 4px;
+    }
+    
+    #result {
+      margin-top: 20px;
+      font-size: 18px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    select#unitToggle {
+      padding: 10px;
+      font-size: 16px;
+      border: 1px solid #000000;
+      border-radius: 5px;
+      background-color: #afafaf;
+      color: #333;
+      transition: border-color 0.3s ease-in-out;
+      width: 100%;
+      max-width: 200px; 
+    }
+  
+    select#unitToggle:focus {
+      outline: none;
+      border-color: #5900ff;
+    }
+
+    .info-section {
+      margin-bottom: 20px; 
+    }
+
+    .underweight {
+      color: blue; /* Change this to the color you want */
+    }
+  
+    .healthy {
+      color: rgb(2, 194, 2); /* Change this to the color you want */
+    }
+  
+    .overweight {
+      color: rgb(172, 155, 0); /* Change this to the color you want */
+    }
+  
+    .obesity {
+      color: red; /* Change this to the color you want */
+    }
+  </style>
+</head>
+
+<body>
+  
+  <div id="navigation"></div>
+
+  <h1>BMI Calculator</h1>
+
+  <div class="container">
+    
+
+    <label for="unitToggle">Choose unit:</label>
+    <select id="unitToggle">
+      <option value="metric">Metric (kg/cm)</option>
+      <option value="imperial">Imperial (lbs/in)</option>
+    </select>
+
+    <div class="input-group">
+      <label for="weight">Weight:</label>
+      <input type="number" id="weight" placeholder="Enter your weight">
+    </div>
+
+    <div class="input-group">
+      <label for="height">Height:</label>
+      <input type="number" id="height" placeholder="Enter your height">
+    </div>
+
+    <div id="result"></div>
+
+  </div>
+
+  <div class="container">
+    <h2>Understanding the formula for Body Mass Index (BMI)</h2>
+  
+    <div class="info-section">
+      <p>BMI is a measure of body fat based on your weight in relation to your height, applying to most adult men and women aged 20 and over.</p>
+      <p>For children aged 2 and over, BMI percentile is the best assessment of body fat.</p>
+      <p><span class="male-equation">BMI = weight / height * height</span></p>
+      <p><span class="units">Units: Kilograms (kg) for weight, meters (m) for height.</span></p>
+    </div>
+  
+    <div class="info-section">
+      <h3>BMI Categories</h3>
+      <p><span class="underweight">Underweight: BMI is less than 18.5</span></p>
+      <p><span class="healthy">Normal weight: BMI is 18.5 to 24.9</span></p>
+      <p><span class="overweight">Overweight: BMI is 25 to 29.9</span></p>
+      <p><span class="obesity">Obesity: BMI is 30 or more</span></p>
+    </div>
+  </div>
+
+</body>
+</html>
