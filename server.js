@@ -4,7 +4,6 @@ const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
-const MongoStore = require('connect-mongo');
 
 const User = require('./models/user');
 const Feedback = require('./models/feedback-schema');
@@ -31,7 +30,6 @@ app.use(session({
   resave: false,
   saveUninitialized: false,
   cookie: { secure: false },
-  store: MongoStore.create({ mongoUrl: process.env.MONGODB_CONNECTION_STRING })
 }));
 
 // Serve static files from the "public" directory
