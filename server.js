@@ -1,10 +1,11 @@
 const express = require('express');
 const path = require('path');
-//const fs = require('fs');
 const bodyParser = require('body-parser');
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const session = require('express-session');
+const MongoStore = require('connect-mongo');
+
 const User = require('./models/user');
 const Feedback = require('./models/feedback-schema');
 const { Comment, Post } = require('./models/forum-schema');
@@ -19,7 +20,7 @@ db.once('open', function() {
 });
 
 User.updateMany({ points: { $in: [null, undefined] } }, { points: 0 })
-  .then(() => console.log('Users updated successfully'))
+  .then(() => console.log('Points updated successfully'))
   .catch(err => console.error('Error updating users:', err));
 
 const app = express();
@@ -29,7 +30,8 @@ app.use(session({
   secret: process.env.SESSION_SECRET,
   resave: false,
   saveUninitialized: false,
-  cookie: { secure: false }
+  cookie: { secure: false },
+  store: MongoStore.create({ mongoUrl: process.env.MONGODB_CONNECTION_STRING })
 }));
 
 // Serve static files from the "public" directory
@@ -98,8 +100,16 @@ app.get('/forums', checkAuthenticated, (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'views', 'forum.html'));
 });
 
+app.get('/leaderboard', checkAuthenticated, async (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views', 'leaderboard.html'));
+});
+
 app.get('/profile', checkAuthenticated, async (req, res) => {
   res.sendFile(path.join(__dirname, 'public', 'views', 'profile.html'));
+});
+
+app.get('/redemption', checkAuthenticated, async (req, res) => {
+  res.sendFile(path.join(__dirname, 'public', 'views', 'redemption.html'));
 });
 
 app.get('/user', checkAuthenticated, async (req, res) => {
@@ -131,7 +141,7 @@ app.get('/check-session', async (req, res) => {
     } catch (err) {
       console.error('Error during findById:', err);
       res.status(500).send('Error checking session.');
-    }
+    } 
   } else {
     res.send({ loggedIn: false });
   }
@@ -166,6 +176,110 @@ app.put('/api/user', async (req, res) => {
   } catch (err) {
     console.error('Error updating user:', err);
     res.status(500).json({ message: 'Error updating user' });
+  }
+});
+
+app.get('/api/leaderboard', async (req, res) => {
+  try {
+    // Find all users, sort them by points in descending order and then by the date they reached the points in ascending order, and exclude users with no points
+    const users = await User.find({ points: { $gt: 0 } }).sort({ points: -1, dateReachedPoints: 1 });
+
+    // Format the users for the leaderboard
+    const leaderboard = users.map(user => ({
+      username: user.username,
+      points: user.points,
+      totalPointsEarned: user.totalPointsEarned, // Include totalPointsEarned in the response
+    }));
+
+    res.json(leaderboard);
+  } catch (err) {
+    console.error(err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Route for the redemption page
+app.get('/redemption', checkAuthenticated, async (req, res) => {
+  try {
+    // Find the user and their available points and rewards
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Render the redemption page with the user's available points and the available rewards
+    res.render('redemption', { points: user.points, rewards: user.claimedRewards });
+  } catch (err) {
+    console.error('Error in /redemption/:rewardIndex route:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Route to redeem a reward
+app.post('/redemption/:rewardIndex', checkAuthenticated, async (req, res) => {
+  try {
+    // Find the user
+    const user = await User.findById(req.session.userId);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Get the reward
+    const reward = req.body;
+    console.log('Reward:', reward);
+
+    // Check if the reward has already been claimed
+    const alreadyClaimed = user.claimedRewards.some(r => r.name === reward.name && r.claimed);
+    if (alreadyClaimed) {
+      return res.status(400).json({ message: 'This reward has already been claimed' });
+    }
+
+    // Check if the user has enough points to redeem the reward
+    if (user.points < reward.cost) {
+      return res.status(400).json({ message: 'Not enough points to redeem this reward' });
+    }
+
+    // Subtract the cost of the reward from the user's points
+    user.points -= reward.cost;
+
+    // Add the reward to the user's claimed rewards and set claimed to true
+    user.claimedRewards.push({
+      name: reward.name,
+    });
+
+    // Tell Mongoose that the claimedRewards array has been modified
+    user.markModified('claimedRewards');
+
+    // Save the updated user
+    //await user.save();
+    await user.save().then(() => console.log('Reward saved successfully'));
+
+    // Log the updated user
+    console.log('Updated user:', user);
+
+    // Redirect the user back to the redemption page
+    res.redirect('/redemption');
+  } catch (err) {
+    console.error('Error in /redemption/:rewardIndex route:', err);
+    res.status(500).json({ message: 'Server error' });
+  }
+});
+
+// Route to get the user's claimed rewards
+app.get('/claimedRewards', checkAuthenticated, async (req, res) => {
+  try {
+    // Find the user
+    const user = await User.findById(req.session.userId);
+    console.log('Retrieved user:', user);
+    if (!user) {
+      return res.status(404).json({ message: 'User not found' });
+    }
+
+    // Send the user's claimed rewards
+    res.json(user.claimedRewards);
+  } catch (err) {
+    console.error('Error in /claimedRewards route:', err);
+    res.status(500).json({ message: 'Server error' });
   }
 });
 
@@ -222,43 +336,51 @@ app.delete('/forum/:id', async (req, res) => {
 
 app.post('/forum/:id/like', checkAuthenticated, async (req, res) => {
   try {
-      const post = await Post.findById(req.params.id);
-      if (!post) {
-          return res.status(404).json({ message: 'Post not found' });
-      }
-      const userId = req.session.userId;
-      if (post.likedBy.includes(userId)) {
-          post.likes -= 1;
-          post.likedBy.pull(userId);
-      } else {
-          post.likes += 1;
-          post.likedBy.push(userId);
-      }
-      await post.save();
-      res.json(post);
+    const userId = req.session.userId;
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Check if the user has already liked the post
+    const alreadyLiked = post.likedBy.includes(userId);
+
+    // If the user has already liked the post, remove the like
+    // Otherwise, add the like and remove any dislike
+    const update = alreadyLiked
+      ? { $pull: { likedBy: userId }, $inc: { likes: -1 } }
+      : { $addToSet: { likedBy: userId }, $pull: { dislikedBy: userId }, $inc: { likes: 1, dislikes: post.dislikedBy.includes(userId) ? -1 : 0 } };
+
+    const updatedPost = await Post.findByIdAndUpdate(req.params.id, update, { new: true });
+
+    res.json(updatedPost);
   } catch (err) {
-      res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 
 app.post('/forum/:id/dislike', checkAuthenticated, async (req, res) => {
   try {
-      const post = await Post.findById(req.params.id);
-      if (!post) {
-          return res.status(404).json({ message: 'Post not found' });
-      }
-      const userId = req.session.userId;
-      if (post.dislikedBy.includes(userId)) {
-          post.dislikes -= 1;
-          post.dislikedBy.pull(userId);
-      } else {
-          post.dislikes += 1;
-          post.dislikedBy.push(userId);
-      }
-      await post.save();
-      res.json(post);
+    const userId = req.session.userId;
+    const post = await Post.findById(req.params.id);
+    if (!post) {
+      return res.status(404).json({ message: 'Post not found' });
+    }
+
+    // Check if the user has already disliked the post
+    const alreadyDisliked = post.dislikedBy.includes(userId);
+
+    // If the user has already disliked the post, remove the dislike
+    // Otherwise, add the dislike and remove any like
+    const update = alreadyDisliked
+      ? { $pull: { dislikedBy: userId }, $inc: { dislikes: -1 } }
+      : { $addToSet: { dislikedBy: userId }, $pull: { likedBy: userId }, $inc: { dislikes: 1, likes: post.likedBy.includes(userId) ? -1 : 0 } };
+
+    const updatedPost = await Post.findByIdAndUpdate(req.params.id, update, { new: true });
+
+    res.json(updatedPost);
   } catch (err) {
-      res.status(500).json({ message: err.message });
+    res.status(500).json({ message: err.message });
   }
 });
 
@@ -412,6 +534,9 @@ app.post('/login', async (req, res) => {
       if (result === true) {
         try {
           req.session.userId = user._id;
+          req.session.claimedRewards = user.claimedRewards;
+          // Set a cookie with the user's ID
+          res.cookie('userId', user._id);
           console.log('req.session.userId:', req.session.userId);
           res.status(200).send('Logged in!');
         } catch (err) {

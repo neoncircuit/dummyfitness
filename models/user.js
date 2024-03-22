@@ -11,6 +11,10 @@ const UserSchema = new mongoose.Schema({
     exerciseFrequency: { type: String },
     fitnessGoals: { type: String },
     points: { type: Number, default: 0 },
+    totalPointsEarned: { type: Number, default: 0 },
+    claimedRewards: [{
+        name: String,
+    }],
 });
 
 module.exports = mongoose.model('User', UserSchema);

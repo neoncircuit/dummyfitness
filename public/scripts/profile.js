@@ -48,42 +48,6 @@ window.onload = async function() {
     document.getElementById('exerciseFrequency').value = user.exerciseFrequency;
     document.getElementById('fitnessGoals').value = user.fitnessGoals;
 
-    // // Populate the region select with the regions
-    // if (regionSelect.options.length === 0) { // Check if options already exist
-    //     for (const region in countriesByRegion) {
-    //         const option = document.createElement('option');
-    //         option.value = region;
-    //         option.text = region;
-    //         regionSelect.add(option);
-    //     }
-    // }
-    
-    // // Set the default region and country
-    // if (countriesByRegion[user.region]) {
-    //     regionSelect.value = user.region;
-    //     //countrySelect.value = user.country;
-    // }
-
-    // countrySelect.value = user.country;
-
-    // regionSelect.onchange = function() {
-    //     const selectedRegion = this.value;
-
-    //     // Clear the country select
-    //     countrySelect.innerHTML = '';
-
-    //     if (countriesByRegion[selectedRegion]) {
-    //         // Add an option for each country in the selected region
-    //         const countries = countriesByRegion[selectedRegion];
-    //         for (const country of countries) {
-    //             const option = document.createElement('option');
-    //             option.value = country;
-    //             option.text = country;
-    //             countrySelect.add(option);
-    //         }
-    //     }
-    // };
-
     // Populate the region select with the regions
     let populateRegions = new Promise((resolve, reject) => {
         if (regionSelect.options.length === 0) { // Check if options already exist

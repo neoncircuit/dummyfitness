@@ -1,0 +1,120 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <title>BMI Calculator</title>
+
+  <script src="/scripts/navigation.js" defer></script>
+
+  <style>
+    /* Additional styles specific to this page */
+    body {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #ffffff;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      border: 1px solid #fcfcfc;
+      border-radius: 4px;
+    }
+
+    h2 {
+      text-align: center;
+    }
+
+    /* Rewards container styling */
+    #rewardsContainer {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 20px;
+      padding: 20px;
+    }
+
+    /* Individual reward styling */
+    .reward {
+      border: 2px solid #007BFF;
+      border-radius: 10px;
+      padding: 20px;
+      margin: 10px;
+      width: 300px;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: transform 0.2s ease, box-shadow 0.2s ease;
+      background-color: grey;
+    }
+
+    .reward:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
+    }
+
+    .reward h2 {
+      color: #ffdd00;
+      font-size: 1.5em;
+    }
+
+    .reward p {
+      font-size: 1em;
+      margin: 10px 0;
+    }
+
+    /* Button styling */
+    .reward button {
+      background-color: #007BFF;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      text-align: center;
+      text-decoration: none;
+      display: inline-block;
+      font-size: 1em;
+      margin: 4px 2px;
+      transition: background-color 0.2s ease;
+      cursor: pointer;
+      border-radius: 5px;
+    }
+
+    .reward button:hover {
+      background-color: #0056b3;
+    }
+
+  </style>
+</head>
+
+<body>
+  
+  <div id="navigation"></div>
+
+  <h1>Redeem Rewards</h1>
+
+  <h2 id="userPoints"></h2>
+
+    <div id="rewardsContainer"></div>
+
+  </div>
+
+  <script src="/scripts/redemptionBank.js"></script>
+</body>
+</html>

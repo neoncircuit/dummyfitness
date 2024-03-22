@@ -15,6 +15,8 @@ const navigationContent = `
             </ul>
         </li>
         <li><a href="/forums">Forums</a></li>
+        <li><a href="/leaderboard">Leaderboard</a></li>
+        <li><a href="/redemption">Redemption</a></li>
         <li><a href="/feedback">Feedback</a></li>
         <li id="user-nav"></li>
     </ul>

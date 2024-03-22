@@ -1,0 +1,86 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="/css/style.css">
+
+  <title>BMI Calculator</title>
+
+  <script src="/scripts/navigation.js" defer></script>
+
+  <style>
+    /* Additional styles specific to this page */
+    body {
+      margin: 0;
+    }
+
+    .container {
+      max-width: 600px;
+      margin: 20px auto;
+      padding: 20px;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+    }
+
+    .input-group {
+      margin-bottom: 20px;
+    }
+
+    label {
+      display: block;
+      margin-bottom: 5px;
+      color: #ffffff;
+    }
+
+    input[type="text"] {
+      width: calc(100% - 20px);
+      padding: 10px;
+      border: 1px solid #fcfcfc;
+      border-radius: 4px;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+    }
+  
+    th, td {
+      border: 1px solid #ddd;
+      padding: 8px;
+      text-align: left;
+    }
+  
+    th {
+      background-color: #4CAF50;
+      color: white;
+    }
+
+  </style>
+</head>
+
+<body>
+  
+  <div id="navigation"></div>
+
+  <h1>Leaderboard</h1>
+
+  <div class="container">
+    <table id="leaderboardTable">
+      <thead>
+        <tr>
+          <th>Rank</th>
+          <th>Name</th>
+          <th>Points</th>
+        </tr>
+      </thead>
+      <tbody>
+        <!-- Leaderboard rows will be inserted here by JavaScript -->
+      </tbody>
+    </table>
+  </div>
+
+  <script src="/scripts/leaderboard.js"></script>
+
+</body>
+</html>

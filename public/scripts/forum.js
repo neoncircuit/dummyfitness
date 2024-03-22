@@ -164,6 +164,8 @@ async function likePost(postId) {
     if (response.ok) {
         const post = await response.json();
         document.getElementById(`likes-${postId}`).textContent = `${post.likes} likes`;
+        // Also update the dislike count
+        document.getElementById(`dislikes-${postId}`).textContent = `${post.dislikes} dislikes`;
     } else {
         console.error(`Error: ${response.status}`);
     }
@@ -176,6 +178,8 @@ async function dislikePost(postId) {
     if (response.ok) {
         const post = await response.json();
         document.getElementById(`dislikes-${postId}`).textContent = `${post.dislikes} dislikes`;
+        // Also update the like count
+        document.getElementById(`likes-${postId}`).textContent = `${post.likes} likes`;
     } else {
         console.error(`Error: ${response.status}`);
     }
