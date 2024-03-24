@@ -95,7 +95,7 @@ document.addEventListener('DOMContentLoaded', function() {
             if (height < 39 || height > 98) {
                 errors.push('Please enter a valid height between 39 and 98 inches.');
             }
-            
+
             weight = weight * 0.453592;
             height = height * 2.54;
         } else {
