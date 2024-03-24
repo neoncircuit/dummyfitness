@@ -75,12 +75,6 @@ document.addEventListener('DOMContentLoaded', function() {
         let height = parseFloat(heightInput.value);
         const activityLevel = parseFloat(activityLevelInput.value);
     
-        if (unitType === 'imperial') {
-          // Convert weight from lbs to kg and height from inches to cm
-          weight = weight * 0.453592;
-          height = height * 2.54;
-        }
-    
         // Get the body fat percentage
         const bodyFatPercentage = parseFloat(bodyFatInput.value);
     
@@ -101,6 +95,9 @@ document.addEventListener('DOMContentLoaded', function() {
             if (height < 39 || height > 98) {
                 errors.push('Please enter a valid height between 39 and 98 inches.');
             }
+
+            weight = weight * 0.453592;
+            height = height * 2.54;
         } else {
             if (weight < 30 || weight > 300) {
                 errors.push('Please enter a valid weight between 30 and 300 kg.');
