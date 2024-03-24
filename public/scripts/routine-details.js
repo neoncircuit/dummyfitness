@@ -383,7 +383,6 @@ export function handleIncreaseDurationClick() {
     }
 }
 
-
 export function handleIncreaseRestTimeClick() {
     if (increaseRestTimeCount < 2) {
         increaseRestTimeCount++;
@@ -447,15 +446,53 @@ window.addEventListener('DOMContentLoaded', () => {
     const increaseDurationButton = document.getElementById('increaseDurationButton'); 
     const increaseRestTimeButton = document.getElementById('increaseRestTimeButton');
 
+    const routineWorkoutsElement = document.getElementById('routineWorkouts');
+
     startButton.className = 'workout-button';
     exitButton.className = 'workout-button';
     increaseRepetitionsButton.className = 'workout-button';
     increaseDurationButton.className = 'workout-button';
     increaseRestTimeButton.className = 'workout-button';
 
+    if (!selectedRoutine.workouts) {
+        console.error('Error: routine.workouts is undefined');
+        routineWorkoutsElement.innerHTML = '<p>No workouts in this routine.</p>';
+    } else {
+        const tableHTML = `
+        <table>
+            <tr>
+                <th>Workout</th>
+                <th>Difficulty</th>
+                <th>Muscle Category</th>
+            </tr>
+            ${selectedRoutine.workouts.map((workout) => {
+                // Check if workout is undefined
+                if (!workout) {
+                    console.error(`Error: workout is undefined`);
+                    return '';
+                }
+    
+                return `
+                    <tr>
+                        <td>${workout.name}</td>
+                        <td>${workout.difficulty}</td>
+                        <td>${workout.category}</td>
+                    </tr>
+                `;
+            }).join('')}
+        </table>
+        `;
+    
+        routineWorkoutsElement.insertAdjacentHTML('beforeend', tableHTML);
+    }
+
     if (startButton) {
         startButton.addEventListener('click', () => {
             startButton.style.display = 'none';
+
+            increaseRepetitionsButton.style.display = 'block';
+            increaseDurationButton.style.display = 'block';
+            increaseRestTimeButton.style.display = 'block';
     
             startRoutine(selectedRoutine);
         });
