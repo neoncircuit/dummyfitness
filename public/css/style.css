@@ -247,14 +247,14 @@ li:not(:first-child) a:hover, li:not(:first-child) button:hover {
 }
 
 #logout-button {
-  border: none; /* Removes the border */
-  outline: none; /* Removes the outline that appears when the button is focused */
-  background: none; /* Removes the default background */
-  text-decoration: none; /* Removes the underline */
+  border: none; 
+  outline: none; 
+  background: none; 
+  text-decoration: none; 
   line-height: 50px;
   text-transform: uppercase;
   padding: 5px 15px;
-  color: inherit; /* Inherits the color from the parent element */
+  color: inherit; 
 }
 
 #logout-button:hover {
@@ -280,7 +280,6 @@ nav ul {
 
 @media screen and (max-width: 768px) {
   /* Adjustments for smaller screens */
-   /* Hide the navbar and show the hamburger menu on smaller screens */
    nav ul {
     position: absolute;
     top: 0;

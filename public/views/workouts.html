@@ -22,17 +22,14 @@
       transition: transform 0.3s ease-in-out;
     }
 
-    /* Styles for Beginner workouts */
     .workout-card.beginner {
       background-color: #507900;
     }
 
-    /* Styles for Intermediate workouts */
     .workout-card.intermediate {
       background-color: #a58400;
     }
 
-    /* Styles for Advanced workouts */
     .workout-card.advanced {
       background-color: #8f0000;
     }
@@ -44,10 +41,9 @@
     .workout-card h2 {
       font-size: 1.5em;
       margin-bottom: 10px;
-      color: #fff; /* Ensure text is readable on colored backgrounds */
+      color: #fff; 
     }
 
-    /* Dropdown Styles */
     select {
       padding: 8px;
       font-size: 16px;
@@ -89,7 +85,6 @@
   
   <h1>Workouts</h1>
 
-  <!-- Add the search bar input element -->
   <input type="text" id="searchBar" placeholder="Search for workouts...">
 
   <h2>Recommended Approach to exercises: </h2>
@@ -100,15 +95,12 @@
     <option value="All">All</option>
     <option value="Difficulty">Difficulty</option>
     <option value="Category">Category</option>
-    <!-- Add other options as needed -->
   </select>
   
   <div id="filterDropdowns">
-    <!-- Second dropdown will appear here based on selection -->
   </div>
   
   <div class="workouts-container">
-    <!-- Content for the workouts page -->
   </div>
 
 </body>
