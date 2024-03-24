@@ -180,13 +180,12 @@ app.put('/api/user', async (req, res) => {
 app.get('/api/leaderboard', async (req, res) => {
   try {
     // Find all users, sort them by points in descending order and then by the date they reached the points in ascending order, and exclude users with no points
-    const users = await User.find({ points: { $gt: 0 } }).sort({ points: -1, dateReachedPoints: 1 });
+    const users = await User.find({ totalPointsEarned: { $gt: 0 } }).sort({ totalPointsEarned: -1, dateReachedPoints: 1 });
 
     // Format the users for the leaderboard
     const leaderboard = users.map(user => ({
       username: user.username,
-      points: user.points,
-      totalPointsEarned: user.totalPointsEarned, // Include totalPointsEarned in the response
+      totalPointsEarned: user.totalPointsEarned, 
     }));
 
     res.json(leaderboard);
@@ -249,7 +248,6 @@ app.post('/redemption/:rewardIndex', checkAuthenticated, async (req, res) => {
     user.markModified('claimedRewards');
 
     // Save the updated user
-    //await user.save();
     await user.save().then(() => console.log('Reward saved successfully'));
 
     // Log the updated user
