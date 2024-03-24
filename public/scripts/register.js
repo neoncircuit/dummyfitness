@@ -93,3 +93,4 @@ document.getElementById('password-toggle').addEventListener('change', function(e
     passwordInput.type = 'password'; // Hide password
   }
 });
+
