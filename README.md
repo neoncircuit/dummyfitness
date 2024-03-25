@@ -1,4 +1,9 @@
 # dummyfitness
+This is my final year project where I am tasked to design a fitness web application for novices in strength training.
+
+## Usage
+My application is powered by Heroku with the link:
+Because I don't want to incur any unnecessary charges into my hosting of the web application, please request access.
 
 ## Credits and Acknowledgements
 
