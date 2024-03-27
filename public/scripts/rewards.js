@@ -1,7 +1,6 @@
 // Import the User model
 const User = require('/models/user.js');
 
-// Function to update a user's reward points
 async function updateRewardPoints(userId, pointsToAdd) {
   try {
     // Find the user by their ID
@@ -23,7 +22,6 @@ async function updateRewardPoints(userId, pointsToAdd) {
   }
 }
 
-// Function to get a user's reward points
 async function getRewardPoints(userId) {
   try {
     // Find the user by their ID

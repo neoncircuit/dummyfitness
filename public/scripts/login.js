@@ -16,7 +16,6 @@ document.getElementById('login-form').addEventListener('submit', function(event)
     })
     .then(response => {
       if (response.status === 200) {
-        // Redirect the user to another page
         window.location.href = '/';
       } else if (response.status === 401) {
         // Display an error message for incorrect password

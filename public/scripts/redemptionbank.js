@@ -8,7 +8,6 @@ class Reward {
   
     // Method to display the reward on the page
     display(index) {
-        // Create a new div for the reward
         const rewardDiv = document.createElement('div');
         rewardDiv.classList.add('reward'); // Use class for styling
     
@@ -50,7 +49,6 @@ const rewards = [
         'Unlock a one-on-one video coaching session with a fitness coach, offering personalized advice, motivation, and adjustments to your fitness plan.', 
         600
     ),
-// Add more rewards as needed
 ];
 
 // Function to display the rewards on the page
@@ -101,7 +99,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
         method: 'GET',
         headers: {
             'Content-Type': 'application/json',
-            // Include any other headers your server requires for authentication
             },
         })
         .then(response => response.json())

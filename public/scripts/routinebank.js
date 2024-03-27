@@ -25,7 +25,7 @@ const routines = [
       workoutMap['Burpees'], 
       workoutMap['Mountain Climbers'], 
       workoutMap['Jumping Jacks'],
-    ], // select workouts for this routine
+    ], 
   },
 
   {
@@ -34,7 +34,7 @@ const routines = [
       workoutMap['Chin Ups'], 
       workoutMap['Pull Ups'], 
       workoutMap['Push Ups'],
-    ], // select workouts for this routine
+    ], 
   },
 
   {
@@ -43,7 +43,7 @@ const routines = [
       workoutMap['Squats (Barbell)'], 
       workoutMap['Deadlifts (Barbell)'], 
       workoutMap['Hip Thrusts (Barbell)'],
-    ], // select workouts for this routine
+    ], 
   },
 
   {
@@ -53,7 +53,7 @@ const routines = [
       workoutMap['Side Planks'], 
       workoutMap['Planks (Straight-Arm)'],
       workoutMap['Side Planks (Straight-Arm)'],
-    ], // select workouts for this routine
+    ], 
   },
 
   {
@@ -62,7 +62,7 @@ const routines = [
       workoutMap['Squats (Barbell)'], 
       workoutMap['Deadlifts (Barbell)'], 
       workoutMap['Hip Thrusts (Barbell)'],
-    ], // select workouts for this routine
+    ], 
   },
 ].map(routine => {
   console.log(routine.workouts); // Log the workouts array
@@ -73,12 +73,5 @@ const routines = [
     totalPoints,
   };
 });
-
-  //];
-
-// // Calculate total points for each routine
-// routines.forEach(routine => {
-//   routine.totalPoints = routine.workouts.reduce((total, workout) => total + workout.points, 0);
-// });
 
 export default routines;

@@ -203,4 +203,3 @@ document.getElementById('newPostForm').addEventListener('submit', submitPost);
 // Call fetchAndDisplayPosts when the page loads
 document.addEventListener('DOMContentLoaded', fetchAndDisplayPosts);
 
-//document.addEventListener('DOMContentLoaded', () => fetchAndDisplayPosts(currentUser));

@@ -11,9 +11,6 @@ window.onload = function() {
             
             // Append the heading element to the body of the page
             document.body.appendChild(heading);
-            
-            // Display the user's other information as needed
-            // ...
     })
         .catch((error) => {
         console.error('Error:', error);

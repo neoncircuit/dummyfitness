@@ -7,7 +7,7 @@ let increaseRestTimeCount = 0; // Variable to track the number of times increase
 let additionalRepetitions = 0; // Additional repetitions added by the "Increase Repetitions" button
 let additionalRestTime = 0; // Additional rest time added by the "Increase Rest Time" button
 let additionalDuration = 0; // Additional duration added by the "Increase Duration" button
-let pointsEarned = 0;
+let pointsEarned = 0; // Variable to track number of points
 
 // Get the URL parameters
 const urlParams = new URLSearchParams(window.location.search);
@@ -187,7 +187,6 @@ async function performWorkout(workout, index) {
                 if (durationCount === 0) {
                     clearInterval(durationIntervalId);
                     document.getElementById(`timeline-step-${index}`).classList.add('timeline-step-completed');
-                    //resolve(); // Resolve the promise when durationCount reaches 0
                     resolve(pointsEarned);
                 }
             }, 1000); // Run every second
@@ -209,7 +208,6 @@ async function performWorkout(workout, index) {
                 if (count === 0) {
                     clearInterval(intervalId);
                     document.getElementById(`timeline-step-${index}`).classList.add('timeline-step-completed');
-                    //resolve(); // Resolve the promise when count reaches 0
                     resolve(pointsEarned);
                 }
             }, 4000); // Run every 4 seconds
@@ -412,7 +410,6 @@ function getUser() {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // Include any other headers your server requires for authentication
       },
     })
     .then(response => response.json())
@@ -427,7 +424,6 @@ function saveUser(user) {
       method: 'PUT',
       headers: {
         'Content-Type': 'application/json',
-        // Include any other headers your server requires for authentication
       },
       body: JSON.stringify(user),
     })

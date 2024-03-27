@@ -10,7 +10,6 @@ document.addEventListener('DOMContentLoaded', (event) => {
       method: 'GET',
       headers: {
         'Content-Type': 'application/json',
-        // Include any other headers your server requires for authentication
       },
     })
     .then(response => response.json())

@@ -5,7 +5,7 @@ document.head.appendChild(papaparseScript);
 
 // Papaparse after the script has loaded
 papaparseScript.onload = function() {
-  fetch('/csv/fitnessquotesbank.csv') // Adjust the path to your CSV file
+  fetch('/csv/fitnessquotesbank.csv') 
     .then(response => response.text())
     .then(data => {
       const parsedData = Papa.parse(data, {

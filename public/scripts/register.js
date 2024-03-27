@@ -2,7 +2,6 @@
 fetch('/data/countries.json')
   .then(response => response.json())
   .then(countries => {
-    // Populate the region dropdown
     const regions = [...new Set(countries.map(country => country.region))];
     const regionSelect = document.getElementById('new-region');
     regions.forEach(region => {

@@ -7,7 +7,6 @@ fetch('/api/leaderboard')
 
     // Loop through the leaderboard data
     leaderboard.forEach((user, index) => {
-      // Create a new row
       const row = tbody.insertRow();
 
       // Insert cells for the rank, name, and points
