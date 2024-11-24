@@ -1,17 +1,17 @@
 {
   "format": 1,
   "restore": {
-    "C:\\Users\\James\\OneDrive\\Singapore Institute of Management\\Computer Science\\CS Year 3 Final Sem\\CM3070 Final Year Project\\dummyfitness4\\backend\\backend.csproj": {}
+    "F:\\UoL Projects\\dummyfitness\\backend\\backend.csproj": {}
   },
   "projects": {
-    "C:\\Users\\James\\OneDrive\\Singapore Institute of Management\\Computer Science\\CS Year 3 Final Sem\\CM3070 Final Year Project\\dummyfitness4\\backend\\backend.csproj": {
+    "F:\\UoL Projects\\dummyfitness\\backend\\backend.csproj": {
       "version": "1.0.0",
       "restore": {
-        "projectUniqueName": "C:\\Users\\James\\OneDrive\\Singapore Institute of Management\\Computer Science\\CS Year 3 Final Sem\\CM3070 Final Year Project\\dummyfitness4\\backend\\backend.csproj",
+        "projectUniqueName": "F:\\UoL Projects\\dummyfitness\\backend\\backend.csproj",
         "projectName": "backend",
-        "projectPath": "C:\\Users\\James\\OneDrive\\Singapore Institute of Management\\Computer Science\\CS Year 3 Final Sem\\CM3070 Final Year Project\\dummyfitness4\\backend\\backend.csproj",
+        "projectPath": "F:\\UoL Projects\\dummyfitness\\backend\\backend.csproj",
         "packagesPath": "C:\\Users\\James\\.nuget\\packages\\",
-        "outputPath": "C:\\Users\\James\\OneDrive\\Singapore Institute of Management\\Computer Science\\CS Year 3 Final Sem\\CM3070 Final Year Project\\dummyfitness4\\backend\\obj\\",
+        "outputPath": "F:\\UoL Projects\\dummyfitness\\backend\\obj\\",
         "projectStyle": "PackageReference",
         "fallbackFolders": [
           "C:\\Program Files (x86)\\Microsoft Visual Studio\\Shared\\NuGetPackages"
